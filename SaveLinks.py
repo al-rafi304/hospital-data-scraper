@@ -1,7 +1,8 @@
 import requests
 import csv
 
-URL = "https://pts.patientrightsadvocatefiles.org/facility/search?search=&searchstate=NY"
+STATE_CODE = 'TX'
+URL = f"https://pts.patientrightsadvocatefiles.org/facility/search?search=&searchstate={STATE_CODE}"
 STORAGE = "https://storage.patientrightsadvocatefiles.org"
 HEADERS = {'sessionid': '5087494111016062868872034'}
 
@@ -28,7 +29,7 @@ def getFileTypes(data):
     return sorted(list(unique_types))
 
 def exportCSV(links:list, fields):
-    filename = "download_links.csv"
+    filename = f"{STATE_CODE}_links.csv"
 
     with open(filename, mode="w", newline="", encoding="utf-8") as file:
         writer = csv.DictWriter(file, fieldnames=['name', *fields])
@@ -36,7 +37,7 @@ def exportCSV(links:list, fields):
         writer.writerows(links)
 
 if __name__ == '__main__':
-    print("Fetching data...")
+    print(f"Fetching data for {STATE_CODE}...")
     data = fetchData()
     links = extractLinks(data)
     fileTypes = getFileTypes(data)
