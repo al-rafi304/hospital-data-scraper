@@ -5,7 +5,7 @@ STATE_CODE = 'NY'
 URL = f"https://pts.patientrightsadvocatefiles.org/facility/search?search=&searchstate={STATE_CODE}"
 STORAGE = "https://storage.patientrightsadvocatefiles.org"
 HEADERS = {'sessionid': '5087494111016062868872034'}
-CSV_HEADERS = {'name':"", 'csv':"", 'hospital_link':""}
+CSV_HEADERS = {'name':"", 'csv':"", 'hospital_link':"", 'hospital_address': ""}
 
 def fetchData():
     res = requests.get(URL, headers=HEADERS)
@@ -20,7 +20,8 @@ def extractLinks(data):
     for item in data:
         info = CSV_HEADERS.copy()
         info['name'] = item['name']
-        info['hospital_link'] = item['url']
+        info['hospital_link'] = f"https://hospitalpricingfiles.org/details/{item['id']}"
+        info['hospital_address'] = f"{item['address']} {item['city']} {item['state']} {item['zip']}"
 
         for file in item['files']:
             if file['filesuffix'].lower() == 'csv':
